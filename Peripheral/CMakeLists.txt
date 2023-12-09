@@ -1,0 +1,6 @@
+file(GLOB SOURCES src/*.cpp src/*.c)
+add_library(peripheral ${SOURCES})
+target_include_directories(peripheral PRIVATE ../Debug)
+target_include_directories(peripheral PRIVATE ../Core)
+target_include_directories(peripheral PRIVATE ../User)
+target_include_directories(peripheral PRIVATE inc)
