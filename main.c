@@ -37,33 +37,7 @@ vu8 val;
  * @brief   Initializes the USART2 & USART3 peripheral.
  *
  * @return  none
- */
-void USARTx_CFG(void)
-{
-    GPIO_InitTypeDef  GPIO_InitStructure = {0};
-    USART_InitTypeDef USART_InitStructure = {0};
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_USART1, ENABLE);
-
-    /* USART1 TX-->D.5   RX-->D.6 */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-    USART_InitStructure.USART_BaudRate = 115200;
-    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-
-    USART_Init(USART1, &USART_InitStructure);
-    USART_Cmd(USART1, ENABLE);
-}
 
 /*********************************************************************
  * @fn      main
@@ -77,33 +51,47 @@ int main(void)
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     SystemCoreClockUpdate();
     Delay_Init();
-#if (SDI_PRINT == SDI_PR_OPEN)
-    SDI_Printf_Enable();
-    printf("sdi_print is enabled\n");
-#else
-    USART_Printf_Init(115200);
-    printf("sdi_print is disabled\n");
-#endif
+
+    GPIO_InitTypeDef g = {0};
+    g.GPIO_Pin = GPIO_Pin_1;
+    g.GPIO_Mode = GPIO_Mode_Out_OD;
+    g.GPIO_Speed = GPIO_Speed_2MHz;
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+    GPIO_Init(GPIOC, &g);
+    
+    g.GPIO_Pin = GPIO_Pin_6;
+    g.GPIO_Mode = GPIO_Mode_AF_PP;
+    g.GPIO_Speed = GPIO_Speed_50MHz;
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_USART1, ENABLE);
+    GPIO_Init(GPIOD, &g);
+    GPIO_PinRemapConfig(GPIO_PartialRemap2_USART1, ENABLE);
+
+    USART_InitTypeDef USART_InitStructure = {0};
+    USART_InitStructure.USART_BaudRate = 115200;
+    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+    USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    USART_InitStructure.USART_Parity = USART_Parity_No;
+    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    USART_InitStructure.USART_Mode = USART_Mode_Tx;
+
+    USART_Init(USART1, &USART_InitStructure);
+    USART_Cmd(USART1, ENABLE);
+
+    printf("SystemClk:%d\r\n",SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
 
+    int i = 0;
 
-    printf("SystemClk:%lu\r\n",SystemCoreClock);
-    printf( "ChipID:%08lx\r\n", DBGMCU_GetCHIPID() );
-
-    USARTx_CFG();
-
-    while(1)
+    while (1)
     {
-
-        while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
-        {
-            /* waiting for receiving finish */
-        }
-        val = (USART_ReceiveData(USART1));
-        USART_SendData(USART1, val ^ 0x20);
-        while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-        {
-            /* waiting for sending finish */
-        }
+        Delay_Ms(9);
+        //GPIO_ResetBits(GPIOA, GPIO_Pin_2);
+        GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
+        Delay_Ms(9);
+        //GPIO_SetBits(GPIOA, GPIO_Pin_2);
+        GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
+        
+        printf("count: %d\r\n", ++i);
     }
 }
