@@ -5,27 +5,28 @@ HEX         := ch32v00x.hex
 TMP         := /tmp/
 GDB_PORT    := 3333
 WCH_CFG     := wch-riscv.cfg
+BUILD       := build
 
 .DEFAULT_GOAL := all
 
 .PHONY: clean
 clean:
-	cd build && rm -rf *
+	[ -d "$(BUILD)" ] && cd "$(BUILD)" && rm -rf * || :
 
 .PHONY: cmake
 cmake:
-	cd build && cmake ..
+	mkdir -p "$(BUILD)" && cd "$(BUILD)" && cmake ..
 
 .PHONY: all
 all: build sync flash reset
 
 .PHONY: build
 build:
-	cd build && make
+	cd "$(BUILD)" && make
 
 .PHONY: sync
 sync:
-	cd build && scp "$(HEX)" $(HOST):"$(TMP)"
+	cd "$(BUILD)" && scp "$(HEX)" $(HOST):"$(TMP)"
 
 .PHONY: kill
 kill:

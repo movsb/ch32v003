@@ -1,7 +1,7 @@
 # CH32V00X
 
 我没有 CH32V00X 系列（CH32V003）的 Windows/Linux 开发/调试环境，官方的 MounRiver Studio 不支持 MacOS，而工具链又对 MacOS 支持非常差。
-所以，我就装了个 Windows 虚拟机、创建了一个示例项目，把其中生成的文件提取了出来，研究了一下项目构建流程、下载烧录流程，制作了这个 CMake 库。
+所以，我就装了个 Windows 虚拟机、创建了一个示例项目，把其中生成的文件提取了出来，研究了一下项目构建流程、下载烧录流程，制作了这个 CMake 库（并不理解为什么官方用 make 而不是 cmake）。
 这个库是平台无关的，可以轻易地在 MacOS/Windows/Linux 上使用。
 
 ## 如何在 MacOS 运行

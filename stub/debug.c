@@ -168,7 +168,7 @@ void SDI_Printf_Enable(void)
  * @return  size - Data length
  */
 __attribute__((used)) 
-int _write(int fd, char *buf, int size)
+int _write(int __attribute__((unused)) fd, char *buf, int size)
 {
     int i = 0;
     int writeSize = size;
