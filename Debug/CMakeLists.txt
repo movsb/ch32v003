@@ -1,5 +1,0 @@
-add_library(debug_lib debug.c)
-target_include_directories(debug_lib PRIVATE .)
-target_include_directories(debug_lib PRIVATE ../Core)
-target_include_directories(debug_lib PRIVATE ../User)
-target_include_directories(debug_lib PRIVATE ../Peripheral/inc)

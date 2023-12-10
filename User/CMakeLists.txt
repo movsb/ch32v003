@@ -1,6 +1,0 @@
-file(GLOB SOURCES *.cpp *.c)
-add_library(user ${SOURCES})
-target_include_directories(user PRIVATE .)
-target_include_directories(user PRIVATE ../Debug)
-target_include_directories(user PRIVATE ../Peripheral/inc)
-target_include_directories(user PRIVATE ../Core)

@@ -1,4 +1,5 @@
-#include "debug.h"
+#include <ch32v00x/ch32v00x.h>
+#include <ch32v00x/debug.h>
 
 int main(void)
 {
