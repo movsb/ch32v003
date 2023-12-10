@@ -1,51 +1,5 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2022/08/08
- * Description        : Main program body.
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
-
-/*
- *@Note
- *Multiprocessor communication mode routine:
- *Master:USART1_Tx(PD5)\USART1_Rx(PD6).
- *This routine demonstrates that USART1 receives the data sent by CH341 and inverts
- *it and sends it (baud rate 115200).
- *
- *Hardware connection:PD5 -- Rx
- *                     PD6 -- Tx
- *
- */
-
 #include "debug.h"
 
-
-/* Global define */
-
-
-/* Global Variable */
-vu8 val;
-
-/*********************************************************************
- * @fn      USARTx_CFG
- *
- * @brief   Initializes the USART2 & USART3 peripheral.
- *
- * @return  none
-
-
-/*********************************************************************
- * @fn      main
- *
- * @brief   Main program.
- *
- * @return  none
- */
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -77,11 +31,13 @@ int main(void)
     USART_Init(USART1, &USART_InitStructure);
     USART_Cmd(USART1, ENABLE);
 
-    printf("SystemClk:%d\r\n",SystemCoreClock);
-    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
+    printf("SystemClk:%lu\r\n",SystemCoreClock);
+    printf( "ChipID:%08lx\r\n", DBGMCU_GetCHIPID() );
 
 
     int i = 0;
+    
+    sum(1, 2);
 
     while (1)
     {

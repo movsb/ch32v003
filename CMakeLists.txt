@@ -9,9 +9,9 @@ set(CMAKE_CXX_COMPILER  "riscv-none-embed-g++")
 set(CMAKE_AR            "riscv-none-embed-ar")
 set(CMAKE_RANLIB        "riscv-none-embed-ranlib")
 
-set(COMMON_FLAGS    "-march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -std=gnu99 -Wall -Wextra -Wlogical-op")
-set(CMAKE_C_FLAGS   "${COMMON_FLAGS}")
-set(CMAKE_CXX_FLAGS "${COMMON_FLAGS}")
+set(COMMON_FLAGS    "-march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -Wall -Wextra -Wlogical-op")
+set(CMAKE_C_FLAGS   "${COMMON_FLAGS} -std=gnu17")
+set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=gnu++17")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} -x assembler-with-cpp")
 
 # 使工具链测试编译通过
@@ -25,7 +25,7 @@ add_subdirectory(Peripheral)
 add_subdirectory(Startup)
 add_subdirectory(User)
 
-add_executable(ch32v00x.elf main.c)
+add_executable(ch32v00x.elf main.c test.cpp)
 target_include_directories(ch32v00x.elf PRIVATE Debug)
 target_include_directories(ch32v00x.elf PRIVATE Peripheral/inc)
 target_include_directories(ch32v00x.elf PRIVATE Core)
