@@ -85,11 +85,9 @@ int main(void)
 
     while (1)
     {
-        Delay_Ms(9);
-        //GPIO_ResetBits(GPIOA, GPIO_Pin_2);
+        Delay_Ms(100);
         GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
-        Delay_Ms(9);
-        //GPIO_SetBits(GPIOA, GPIO_Pin_2);
+        Delay_Ms(100);
         GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
         
         printf("count: %d\r\n", ++i);

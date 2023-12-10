@@ -11,3 +11,11 @@
 - 插入设备，并共享主机设备
 - 可以了
 
+### Alpine 配置
+
+- 开启  TCP 端口转发：`AllowTcpForwarding yes`
+
+
+## 参考文档
+
+- [Running glibc programs - Alpine Linux](https://wiki.alpinelinux.org/wiki/Running_glibc_programs#gcompat)

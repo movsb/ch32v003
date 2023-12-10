@@ -1,0 +1,23 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"variables": {
+				"toolchainPrefix": "/Users/Shared/MRS_Toolchain_MAC_V191/xpack-riscv-none-embed-gcc-8.2.0"
+			},
+			"name": "OpenOCD",
+			"type": "cppdbg",
+			"request": "launch",
+			"cwd": ".",
+			"program": "${workspaceFolder}/build/ch32v00x.elf",
+			"MIMode": "gdb",
+			"miDebuggerPath": "${toolchainPrefix}/bin/riscv-none-embed-gdb",
+			"useExtendedRemote": true,
+			"miDebuggerServerAddress": "localhost:3333",
+			"setupCommands": []
+		}
+	]
+}
