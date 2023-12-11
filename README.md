@@ -31,6 +31,49 @@
 
 **待补充：** 安装工具链的过程
 
+## 如何编译
+
+直接 `make` 即可一键编译、下载。以下是示例编译输出：
+
+```bash
+ch32v00x (main) → make build
+cd "build" && make
+[  3%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_adc.c.obj
+[  7%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_dbgmcu.c.obj
+[ 11%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_dma.c.obj
+[ 15%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_exti.c.obj
+[ 19%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_flash.c.obj
+[ 23%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_gpio.c.obj
+[ 26%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_i2c.c.obj
+[ 30%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_iwdg.c.obj
+[ 34%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_misc.c.obj
+[ 38%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_opa.c.obj
+[ 42%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_pwr.c.obj
+[ 46%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_rcc.c.obj
+[ 50%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_spi.c.obj
+[ 53%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_tim.c.obj
+[ 57%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_usart.c.obj
+[ 61%] Building C object peripheral/CMakeFiles/peripheral.dir/ch32v00x_wwdg.c.obj
+[ 65%] Linking C static library libperipheral.a
+[ 65%] Built target peripheral
+[ 69%] Building C object stub/CMakeFiles/stub.dir/ch32v00x_it.c.obj
+[ 73%] Building C object stub/CMakeFiles/stub.dir/core_riscv.c.obj
+[ 76%] Building C object stub/CMakeFiles/stub.dir/debug.c.obj
+[ 80%] Building ASM object stub/CMakeFiles/stub.dir/startup_ch32v00x.S.obj
+[ 84%] Building C object stub/CMakeFiles/stub.dir/system_ch32v00x.c.obj
+[ 88%] Linking C static library libstub.a
+[ 88%] Built target stub
+[ 92%] Building C object CMakeFiles/ch32v00x.elf.dir/main.c.obj
+[ 96%] Building CXX object CMakeFiles/ch32v00x.elf.dir/test.cpp.obj
+[100%] Linking CXX executable ch32v00x.elf
+[100%] Built target ch32v00x.elf
+[100%] Built target ch32v00x.hex
+[100%] Built target ch32v00x.lst
+   text    data     bss     dec     hex filename
+   9660     172     420   10252    280c ch32v00x.elf
+[100%] Built target ch32v00x.siz
+```
+
 ## 如何调试
 
 执行 `make debug` 开启端口监听。
@@ -65,6 +108,14 @@
 修改其中的 `variables` 部分为你自己环境的。
 
 按快捷键 `F5` 或点击菜单 `Run` / `Start Debugging` 即可进入调试。
+
+支持的功能：
+
+- 单步、步进、步出
+- 查看变量、添加观察
+- 断点调试
+- 内存查看
+- 调用栈
 
 **注：** 目前仅支持*启动*级别的调试，*附加*调试还没配好。
 
