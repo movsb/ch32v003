@@ -11,11 +11,12 @@ project(ch32v00x)
 # 包含要编译的库目录
 add_subdirectory(${port}/peripheral)
 add_subdirectory(${port}/stub)
+add_subdirectory(${port}/ports)
 
 # 添加目标及头文件、库引用
 set(target "ch32v00x.elf")
 add_executable(${target} main.cpp)
 target_include_directories(${target} PRIVATE ${port}/include)
 target_include_directories(${target} PRIVATE _stuff/base/include)
-target_link_libraries(${target} peripheral stub)
+target_link_libraries(${target} peripheral stub ports)
 ch32v00x_add_target(${target})

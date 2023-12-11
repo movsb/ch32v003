@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <ch32v00x/debug.h>
 
 static uint8_t  p_us = 0;
@@ -64,6 +65,8 @@ void Delay_Ms(uint32_t n)
     SysTick->CTLR &= ~(1 << 0);
 }
 
+static bool g_usart_printf_initialized = false;
+
 void USART_Printf_Init(uint32_t baudrate)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_USART1, ENABLE);
@@ -89,13 +92,47 @@ void USART_Printf_Init(uint32_t baudrate)
 
 	USART_Init(USART1, &u);
 	USART_Cmd(USART1, ENABLE);
+
+	g_usart_printf_initialized = true;
 }
 
 int __attribute__((used)) _write(int __attribute__((unused)) fd, char *buf, int size)
 {
-    for(int i = 0; i < size; i++){
-        while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-        USART_SendData(USART1, *buf++);
-    }
-    return size;
+	// 调用 __libc_init_array 初始化构造函数的时候串口还没有初始化，
+	// 所以会卡死在 while 语句那里。这里加个全局变量避免一下。
+	if (!g_usart_printf_initialized) {
+		return;
+	}
+
+	for(int i = 0; i < size; i++){
+		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+		USART_SendData(USART1, *buf++);
+	}
+	return size;
 }
+
+/*********************************************************************
+ * @fn      _sbrk
+ *
+ * @brief   Change the spatial position of data segment.
+ *
+ * @return  size: Data length
+ */
+__attribute__((used)) 
+void *_sbrk(ptrdiff_t incr)
+{
+    extern char _end[];
+    extern char _heap_end[];
+    static char *curbrk = _end;
+
+    if ((curbrk + incr < _end) || (curbrk + incr > _heap_end))
+    return NULL - 1;
+
+    curbrk += incr;
+    return curbrk - incr;
+}
+
+// C++ 支持
+// Use MRS Create C++ project.pdf
+void _init() { }
+void _fini() { }

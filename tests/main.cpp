@@ -1,6 +1,10 @@
 #include <ch32v00x/ch32v00x.h>
 #include <ch32v00x/debug.h>
 
+#include <time/time.hpp>
+
+using namespace stuff::base;
+
 int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -21,9 +25,9 @@ int main(void)
 
 	for (int i = 1;; i++)
 	{
-		Delay_Ms(100);
+		time::sleep(time::Second);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
-		Delay_Ms(100);
+		time::sleep(time::Second);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
 		
 		printf("count: %d\r\n", i);
