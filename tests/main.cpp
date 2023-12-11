@@ -19,8 +19,6 @@ int main(void)
 	};
 	GPIO_Init(GPIOC, &g);
 
-	sum(1, 2);
-
 	for (int i = 1;; i++)
 	{
 		Delay_Ms(100);

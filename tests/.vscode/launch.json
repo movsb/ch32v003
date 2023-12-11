@@ -6,7 +6,7 @@
 	"configurations": [
 		{
 			"variables": {
-				"toolchainPrefix": "/Users/Shared/MRS_Toolchain_MAC_V191/xpack-riscv-none-embed-gcc-8.2.0"
+				"toolchainPrefix": "${HOME}/code/toolchains/xpack-riscv-none-embed-gcc-8.2.0"
 			},
 			"name": "OpenOCD",
 			"type": "cppdbg",

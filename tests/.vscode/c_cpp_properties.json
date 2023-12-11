@@ -4,12 +4,12 @@
             "name": "RISC-V",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/include/ch32v00x"
+                "${workspaceFolder}/_stuff/ports/ch32v00x/include",
+                "${workspaceFolder}/_stuff/ports/ch32v00x/include/ch32v00x"
             ],
             "defines": [],
             "macFrameworkPath": [],
-            "compilerPath": "/Users/Shared/MRS_Toolchain_MAC_V191/xpack-riscv-none-embed-gcc-8.2.0/bin/riscv-none-embed-gcc",
+            "compilerPath": "${HOME}/code/toolchains/xpack-riscv-none-embed-gcc-8.2.0/bin/riscv-none-embed-gcc",
             "cStandard": "c17",
             "cppStandard": "c++20",
             "intelliSenseMode": "macos-clang-arm64",
