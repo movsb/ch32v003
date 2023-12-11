@@ -6,7 +6,7 @@
 	"configurations": [
 		{
 			"variables": {
-				"toolchainPrefix": "${HOME}/code/toolchains/xpack-riscv-none-embed-gcc-8.2.0"
+				"toolchainPrefix": "/Users/tao/code/toolchains/xpack-riscv-none-embed-gcc-8.2.0"
 			},
 			"name": "OpenOCD",
 			"type": "cppdbg",

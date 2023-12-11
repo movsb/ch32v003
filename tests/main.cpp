@@ -25,9 +25,9 @@ int main(void)
 
 	for (int i = 1;; i++)
 	{
-		time::sleep(time::Second);
+		time::sleep(time::Millisecond*50);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
-		time::sleep(time::Second);
+		time::sleep(time::Millisecond*50);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
 		
 		printf("count: %d\r\n", i);
