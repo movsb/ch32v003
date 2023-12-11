@@ -10,7 +10,7 @@ set(CMAKE_AR            "riscv-none-embed-ar")
 set(CMAKE_RANLIB        "riscv-none-embed-ranlib")
 
 # 设置编译参数和选项
-set(COMMON_FLAGS    "-march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -Wall -Wextra -Wlogical-op")
+set(COMMON_FLAGS    "-march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -Wall -Wextra -Wlogical-op")
 set(CMAKE_C_FLAGS   "${COMMON_FLAGS} -std=gnu17")
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=gnu++17")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} -x assembler-with-cpp")
@@ -29,7 +29,7 @@ function(ch32v00x_add_target name)
 	set(basename "${CMAKE_MATCH_1}")
 
 	# 添加主生成目标及头文件、库引用
-	target_link_options(${name} PRIVATE -T ../stub/ch32v00x.ld -nostartfiles -Xlinker --gc-sections --specs=nano.specs --specs=nosys.specs -Wl,-Map,${basename}.map)
+	target_link_options(${name} PRIVATE -T "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/stub/ch32v00x.ld" -nostartfiles -Xlinker --gc-sections --specs=nano.specs --specs=nosys.specs -Wl,-Map,${basename}.map)
 
 	# 一些自定义的生成目标：二进制文件、列表文件、大小文件等
 	add_custom_target(${basename}.hex ALL riscv-none-embed-objcopy -O ihex ${name} ${basename}.hex)
