@@ -143,6 +143,7 @@ SECTIONS
 
     PROVIDE( _end = _ebss);
 	PROVIDE( end = . );
+  PROVIDE( _heap_start = end );
 
 	.stack ORIGIN(RAM) + LENGTH(RAM) - __stack_size :
 	{

@@ -111,25 +111,32 @@ int __attribute__((used)) _write(int __attribute__((unused)) fd, char *buf, int 
 	return size;
 }
 
-/*********************************************************************
- * @fn      _sbrk
- *
- * @brief   Change the spatial position of data segment.
- *
- * @return  size: Data length
- */
-__attribute__((used)) 
-void *_sbrk(ptrdiff_t incr)
+/**
+ * @brief 动态改变数据段的边界地址（即堆内存）。
+ * 
+ * @see 几个外部变量的定义来自于链接器脚本文件中。
+ * 
+ *  - \p _heap_start    是堆内存的起始地址（ 即 \p .bss 段的结束地址）；
+ *  - \p _heap_end      是堆内存的结束地址（栈的起始地址）；
+ *  
+ * @note _sbrk(0) 可以在启动时拿到堆内存起始地址。
+ *  
+ * @return 改变前的地址。如果失败，返回 -1.
+*/
+void __attribute__((used)) *_sbrk(ptrdiff_t incr)
 {
-    extern char _end[];
-    extern char _heap_end[];
-    static char *curbrk = _end;
+	extern char _heap_start[];
+	extern char _heap_end[];
 
-    if ((curbrk + incr < _end) || (curbrk + incr > _heap_end))
-    return NULL - 1;
+	static char *cur = _heap_start;
+	
+	if (cur + incr < _heap_start || cur + incr > _heap_end)
+		return NULL - 1;
+	
+	char *r = cur;
+	cur += incr;
 
-    curbrk += incr;
-    return curbrk - incr;
+	return r;
 }
 
 // C++ 支持

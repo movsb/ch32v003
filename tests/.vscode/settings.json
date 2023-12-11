@@ -21,6 +21,5 @@
 		"ch32v00x_gpio.h": "c",
 		"debug.h": "c",
 		"ch32v00x_adc.h": "c",
-		"CMakeListsCommon.txt": "cmake"
 	}
 }
