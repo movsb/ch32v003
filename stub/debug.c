@@ -101,7 +101,7 @@ int __attribute__((used)) _write(int __attribute__((unused)) fd, char *buf, int 
 	// 调用 __libc_init_array 初始化构造函数的时候串口还没有初始化，
 	// 所以会卡死在 while 语句那里。这里加个全局变量避免一下。
 	if (!g_usart_printf_initialized) {
-		return;
+		return size;
 	}
 
 	for(int i = 0; i < size; i++){

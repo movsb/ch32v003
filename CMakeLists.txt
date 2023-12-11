@@ -10,7 +10,7 @@ set(CMAKE_AR            "riscv-none-embed-ar")
 set(CMAKE_RANLIB        "riscv-none-embed-ranlib")
 
 # 设置编译参数和选项
-set(COMMON_FLAGS    "-march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -Wall -Wextra -Wlogical-op")
+set(COMMON_FLAGS    "-march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized -Wall -Wextra -Wlogical-op -g")
 set(CMAKE_C_FLAGS   "${COMMON_FLAGS} -std=gnu17")
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=gnu++17")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} -x assembler-with-cpp")
