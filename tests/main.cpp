@@ -1,9 +1,10 @@
 #include <ch32v00x/ch32v00x.h>
 #include <ch32v00x/debug.h>
 
-#include <time/time.hpp>
+#include <time/duration.hpp>
 
 using namespace stuff::base;
+using namespace time::literals;
 
 int main(void)
 {
@@ -22,12 +23,12 @@ int main(void)
 		.GPIO_Mode  = GPIO_Mode_Out_OD,
 	};
 	GPIO_Init(GPIOC, &g);
-
+	
 	for (int i = 1;; i++)
 	{
-		time::sleep(time::Millisecond*50);
+		time::sleep(50ms);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
-		time::sleep(time::Millisecond*50);
+		time::sleep(50ms);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
 		
 		printf("count: %d\r\n", i);
