@@ -18,6 +18,10 @@ set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} -x assembler-with-cpp")
 # 使工具链测试编译通过
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
+enable_language(C)
+enable_language(CXX)
+enable_language(ASM)
+
 # 自定义一个包含常规生成方式的函数
 # name 目前只应该是： xxx.elf 格式
 function(ch32v00x_add_target name)

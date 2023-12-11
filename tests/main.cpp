@@ -24,13 +24,11 @@ int main(void)
 	};
 	GPIO_Init(GPIOC, &g);
 	
-	for (int i = 1;; i++)
-	{
-		time::sleep(50ms);
+	for (int i = 1;; i++) {
+		time::sleep(500ms);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
-		time::sleep(50ms);
+		time::sleep(500ms);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
-		
 		printf("count: %d\r\n", i);
 	}
 }
