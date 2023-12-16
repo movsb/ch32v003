@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <ch32v00x/ch32v00x.h>
 
-void Delay_Init(void);
 void Delay_Us(uint32_t n);
+void Delay_Ms(uint32_t n);
 
 /**
  * @brief 把 printf 绑定到串口上。

@@ -4,9 +4,7 @@
             "name": "RISC-V",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/_stuff/base/include",
-                "${workspaceFolder}/_stuff/ports/ch32v00x/include",
-                "${workspaceFolder}/_stuff/ports/ch32v00x/include/ch32v00x"
+                "${workspaceFolder}/../include"
             ],
             "defines": [],
             "macFrameworkPath": [],

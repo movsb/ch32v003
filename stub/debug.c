@@ -1,43 +1,28 @@
 #include <stdbool.h>
 #include <stddef.h>
+#include <inttypes.h>
 #include <ch32v00x/debug.h>
-
-static uint8_t  p_us = 0;
-
-/*********************************************************************
- * @fn      Delay_Init
- *
- * @brief   Initializes Delay Function.
- *
- * @return  none
- */
-void Delay_Init(void)
-{
-    p_us = SystemCoreClock / 8000000;
-}
+#include <ch32v00x/system_ch32v00x.h>
 
 /*********************************************************************
- * @fn      Delay_Us
- *
  * @brief   Microsecond Delay Time.
- *
  * @param   n - Microsecond number.
- *
  * @return  None
  */
 void Delay_Us(uint32_t n)
 {
-    uint32_t i;
+	uint64_t t = SysTick_GetUptime();
+	while(SysTick_GetUptime() - t < n);
+}
 
-    SysTick->SR &= ~(1 << 0);
-    i = (uint32_t)n * p_us;
-
-    SysTick->CMP = i;
-    SysTick->CNT = 0;
-    SysTick->CTLR |=(1 << 0);
-
-    while((SysTick->SR & (1 << 0)) != (1 << 0));
-    SysTick->CTLR &= ~(1 << 0);
+/*********************************************************************
+ * @brief   Millisecond Delay Time.
+ * @param   n - Millisecond number.
+ * @return  None
+ */
+void Delay_Ms(uint32_t n)
+{
+	return Delay_Us(n*1000);
 }
 
 static bool g_usart_printf_initialized = false;

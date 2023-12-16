@@ -1,11 +1,13 @@
 #include <ch32v00x/ch32v00x.h>
 #include <ch32v00x/debug.h>
+#include <ch32v00x/system_ch32v00x.h>
 
 int main(void)
 {
 	SystemCoreClockUpdate();
-	Delay_Init();
+	NVIC_EnableIRQ(SysTicK_IRQn);
 	USART_Printf_Init(115200);
+	SysTick_Init(100);
 
 	printf("SystemClk:%lu\n",SystemCoreClock);
 	printf( "ChipID:%08lx\n", DBGMCU_GetCHIPID() );
@@ -19,10 +21,10 @@ int main(void)
 	GPIO_Init(GPIOC, &g);
 	
 	for (int i = 1;; i++) {
-		Delay_Us(5e5);
+		Delay_Ms(500);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
-		Delay_Us(5e5);
+		Delay_Ms(500);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
-		printf("count: %d\n", i);
+		printf("当前 Ticks 计数器：%lu us\n", SysTick_GetUptime()/1000/1000);
 	}
 }

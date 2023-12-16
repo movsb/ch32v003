@@ -22,11 +22,15 @@ extern uint32_t SystemCoreClock;          /* System Clock Frequency (Core Clock)
 extern void SystemInit(void);
 extern void SystemCoreClockUpdate(void);
 
+void SysTick_Init(uint32_t msPerOsTick);
+
+/**
+ * @brief 返回自系统运行以来的微秒数。
+*/
+uint64_t SysTick_GetUptime();
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*__CH32V00x_SYSTEM_H */
-
-
-

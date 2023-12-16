@@ -443,6 +443,58 @@ static void SetSysClockTo_48MHz_HSE(void)
 }
 #endif
 
+static uint32_t _usPerOsTick;
+static uint8_t  _ticksPerUs;
 
+/**
+ * @brief 启动系统定时器。
+ * 
+ * @param msPerOsTick   一个操作系统节拍需要多少毫秒。
+ * 
+ * @note 一般来说，类似 FreeRTOS 的 \p msPerOsTick 为 10ms。
+*/
+void SysTick_Init(uint32_t msPerOsTick) {
+	_usPerOsTick = msPerOsTick * 1000;
 
-    
+	// 一微秒的时钟个数（注意这个 Ticks 和 参数里面的 Ticks 的含义不同）。
+	// 按照 8MHz、24、48、144…… 来算，一个字节足够存。
+	_ticksPerUs = SystemCoreClock / 1000000 / 8;
+	
+	// 把一个操作系统 Tick 需要的时间转换成时钟 Ticks 的个数。
+	uint32_t ticksPerOsTick = _usPerOsTick * (uint32_t)_ticksPerUs;
+
+	// CNTIF = 0, disable
+	SysTick->SR &= ~(1 << 0);
+	SysTick->CMP = ticksPerOsTick;
+	SysTick->CNT = 0;
+	SysTick->CTLR = (1 << 3) | (1 << 1) | (1 << 0);
+}
+
+static volatile uint64_t _osTicks = 0;
+
+void __attribute__((interrupt("WCH-Interrupt-fast"))) SysTick_Handler() {
+	_osTicks++;
+	SysTick->SR &= ~(1 << 0);
+}
+
+/**
+ * @note \p _osTicks 与 \p (SysTick->CNT) 不是同时获取的（即原子操作），需要“上锁”。
+ *      比如期望的值是：_osTicks，CNT
+ *      但是实际可能是：_osTicks，中断，CNT
+ *      导致结果可能是：_osTicks 和上次一样，但是由于被中断了一次，CNT 可能归零（或比上次小）
+ *      也就是，两次调用本函数，出现第二交比第一次小的情况。
+ *      为了解决这个问题，进入此函数的时候暂停 SysTick 定时器。
+*/
+
+uint64_t SysTick_GetUptime() {
+	// 临时关闭定时器
+	// 由于没有硬件除法，后面的计算稍慢，所以先拷贝值，然后马上恢复运行。
+	SysTick->CTLR &= ~(1 << 0);
+	uint64_t osTicks = _osTicks;
+	uint64_t cnt     = SysTick->CNT;
+	SysTick->CTLR |=  (1 << 0);
+
+	uint64_t us = _usPerOsTick * _osTicks;
+	us += cnt / (uint64_t)_ticksPerUs;
+	return us;
+}
