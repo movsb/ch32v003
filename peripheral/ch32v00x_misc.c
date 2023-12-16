@@ -11,13 +11,12 @@
  *******************************************************************************/
 #include <ch32v00x/ch32v00x_misc.h>
 
-__IO uint32_t NVIC_Priority_Group = 0;
-
 /*********************************************************************
- * @fn      NVIC_PriorityGroupConfig
+ * @brief Initializes the NVIC peripheral according to the specified parameters in the NVIC_InitStruct.
+ *          Configures the priority grouping - pre-emption priority and subpriority.
  *
- * @brief   Configures the priority grouping - pre-emption priority and subpriority.
- *
+ * @param   NVIC_InitStruct - pointer to a NVIC_InitTypeDef structure that contains the
+ *        configuration information for the specified NVIC peripheral.
  * @param   NVIC_PriorityGroup - specifies the priority grouping bits length.
  *            NVIC_PriorityGroup_0 - 0 bits for pre-emption priority
  *                                   4 bits for subpriority
@@ -32,23 +31,7 @@ __IO uint32_t NVIC_Priority_Group = 0;
  *
  * @return  none
  */
-void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)
-{
-    NVIC_Priority_Group = NVIC_PriorityGroup;
-}
-
-/*********************************************************************
- * @fn      NVIC_Init
- *
- * @brief   Initializes the NVIC peripheral according to the specified parameters in
- *        the NVIC_InitStruct.
- *
- * @param   NVIC_InitStruct - pointer to a NVIC_InitTypeDef structure that contains the
- *        configuration information for the specified NVIC peripheral.
- *
- * @return  none
- */
-void NVIC_Init(NVIC_InitTypeDef *NVIC_InitStruct)
+void NVIC_Init(NVIC_InitTypeDef *NVIC_InitStruct, uint32_t NVIC_Priority_Group)
 {
     uint8_t tmppre = 0;
 

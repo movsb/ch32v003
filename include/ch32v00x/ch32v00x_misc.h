@@ -36,9 +36,7 @@ typedef struct
 #define NVIC_PriorityGroup_3           ((uint32_t)0x03)
 #define NVIC_PriorityGroup_4           ((uint32_t)0x04)
 
-
-void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup);
-void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct);
+void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct,  uint32_t NVIC_Priority_Group);
 
 #ifdef __cplusplus
 }
