@@ -7,8 +7,8 @@ int main(void)
 	Delay_Init();
 	USART_Printf_Init(115200);
 
-	printf("SystemClk:%lu\r\n",SystemCoreClock);
-	printf( "ChipID:%08lx\r\n", DBGMCU_GetCHIPID() );
+	printf("SystemClk:%lu\n",SystemCoreClock);
+	printf( "ChipID:%08lx\n", DBGMCU_GetCHIPID() );
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 	GPIO_InitTypeDef g = {
@@ -23,6 +23,6 @@ int main(void)
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
 		Delay_Us(5e5);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
-		printf("count: %d\r\n", i);
+		printf("count: %d\n", i);
 	}
 }

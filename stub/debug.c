@@ -71,6 +71,16 @@ void USART_Printf_Init(uint32_t baudrate)
 	g_usart_printf_initialized = true;
 }
 
+static void _usart_send_char(uint8_t c) {
+	while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+	USART_SendData(USART1, c);
+}
+
+/**
+ * @brief 重定向底层输出函数，以使得 printf 可以输出到串口设备。
+ * 
+ * @see [Retargeting printf](https://www.imagecraft.com/help/ICCV9CORTEX/web/55_Retargetingprintf.htm)
+*/
 int __attribute__((used)) _write(int __attribute__((unused)) fd, char *buf, int size)
 {
 	// 调用 __libc_init_array 初始化构造函数的时候串口还没有初始化，
@@ -80,8 +90,9 @@ int __attribute__((used)) _write(int __attribute__((unused)) fd, char *buf, int 
 	}
 
 	for(int i = 0; i < size; i++){
-		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-		USART_SendData(USART1, *buf++);
+		if (*buf == '\n') _usart_send_char('\r');
+		_usart_send_char(*buf);
+		buf++;
 	}
 	return size;
 }
