@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stddef.h>
 #include <ch32v00x/debug.h>
 
 static uint8_t  p_us = 0;
