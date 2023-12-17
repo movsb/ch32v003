@@ -9,6 +9,7 @@
 * Attention: This software (modified or not) and binary are used for 
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
 *******************************************************************************/
+#include <stdbool.h>
 #include <ch32v00x/ch32v00x.h>
 
 /* 
@@ -472,6 +473,8 @@ void SysTick_Init(uint32_t msPerOsTick) {
 
 static volatile uint64_t _osTicks = 0;
 
+// TODO 从汇编层面补上中断处理函数占用的周期数
+// TODO 用软件压栈的方式是否更好？
 void __attribute__((interrupt("WCH-Interrupt-fast"))) SysTick_Handler() {
 	_osTicks++;
 	SysTick->SR &= ~(1 << 0);
@@ -483,18 +486,23 @@ void __attribute__((interrupt("WCH-Interrupt-fast"))) SysTick_Handler() {
  *      但是实际可能是：_osTicks，中断，CNT
  *      导致结果可能是：_osTicks 和上次一样，但是由于被中断了一次，CNT 可能归零（或比上次小）
  *      也就是，两次调用本函数，出现第二交比第一次小的情况。
- *      为了解决这个问题，进入此函数的时候暂停 SysTick 定时器。
+ *      为了解决这个问题，有以下几种解决方案：
+ *          - 进入此函数的时候暂停 SysTick 定时器
+ *          - 直到比第一次大才返回（不会死循环），但是会多两个静态变量，费空间
+ *          - 先取 CNT，如果没中断，那比原来大，结果完全正确；如果中断，_osTicks 比原来大（不对）
+ *          - 两次获取 CNT，第二次一定比第一次大才有效（两次获取间隔不可能超过一个 OsTick）（最佳）。
 */
 
 uint64_t SysTick_GetUptime() {
-	// 临时关闭定时器
-	// 由于没有硬件除法，后面的计算稍慢，所以先拷贝值，然后马上恢复运行。
-	SysTick->CTLR &= ~(1 << 0);
-	uint64_t osTicks = _osTicks;
-	uint64_t cnt     = SysTick->CNT;
-	SysTick->CTLR |=  (1 << 0);
+	uint64_t osTicks;
+	uint32_t cnt1, cnt2;
 
-	uint64_t us = _usPerOsTick * _osTicks;
-	us += cnt / (uint64_t)_ticksPerUs;
-	return us;
+	do {
+		cnt1 = SysTick->CNT;
+		osTicks = _osTicks;
+		cnt2 = SysTick->CNT;
+	} while(cnt1 >= cnt2);
+
+	return _usPerOsTick * osTicks
+		+ cnt2 / (uint32_t)_ticksPerUs;
 }
