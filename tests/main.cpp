@@ -1,6 +1,7 @@
 #include <ch32v00x/ch32v00x.h>
 #include <ch32v00x/debug.h>
 #include <ch32v00x/system_ch32v00x.h>
+#include <ch32v00x/ch32v00x_rcc.h>
 
 int main(void)
 {
@@ -11,6 +12,10 @@ int main(void)
 
 	printf("SystemClk:%lu\n",SystemCoreClock);
 	printf( "ChipID:%08lx\n", DBGMCU_GetCHIPID() );
+
+	uint8_t cali = RCC->CTLR >> 8 & 0xFF;
+	uint8_t trim = RCC->CTLR >> 3 & 0x1F;
+	printf("Calibration: %d, trim: %d\n", cali, trim);
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 	GPIO_InitTypeDef g = {
@@ -25,6 +30,6 @@ int main(void)
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
 		Delay_Ms(500);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
-		printf("当前 Ticks 计数器：%lu us\n", SysTick_GetUptime()/1000/1000);
+		printf("当前 Ticks 计数器：%lus\n", SysTick_GetUptime()/1000/1000);
 	}
 }

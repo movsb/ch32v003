@@ -501,7 +501,7 @@ uint64_t SysTick_GetUptime() {
 		cnt1 = SysTick->CNT;
 		osTicks = _osTicks;
 		cnt2 = SysTick->CNT;
-	} while(cnt1 >= cnt2);
+	} while(!(cnt1 < cnt2));
 
 	return _usPerOsTick * osTicks
 		+ cnt2 / (uint32_t)_ticksPerUs;
