@@ -3,8 +3,7 @@
         {
             "name": "RISC-V",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/../include"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "macFrameworkPath": [],

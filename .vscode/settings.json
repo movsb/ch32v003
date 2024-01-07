@@ -1,8 +1,15 @@
 {
 	"cSpell.words": [
-		"CHIPID",
-		"DBGMCU",
+		"GPIOD",
+		"libusb",
+		"microcontroller",
+		"Moun",
+		"NVIC",
 		"Periph",
+		"Qinheng",
+		"riscv",
+		"SDIO",
+		"UART",
 		"USART"
 	]
 }
