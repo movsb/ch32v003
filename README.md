@@ -1,33 +1,70 @@
 # CH32V003
 
-这是一个为 CH32V003 准备的项目模板（VSCode + CMake）。
+This is a minimal and very easy-to-use CH32V003(J4M6) project template made for developing in VsCode using CMake.
 
-我没有 CH32V00X 系列（CH32V003）的 Windows/Linux 开发/调试环境，官方的 MounRiver Studio 不支持 MacOS，而工具链又对 MacOS 支持非常差。
-所以，我就装了个 Windows 虚拟机、创建了一个示例项目，把其中生成的文件提取了出来，研究了一下项目构建流程、下载烧录流程，制作了这个 CMake 库（并不理解为什么官方用 make 而不是 cmake）。
-这个库是平台无关的，应该可以轻易地在 MacOS/Windows/Linux 上使用。
+Before making this project, I found that the official MounRiver Studio doesn't support MacOS, they only provide toolchains.
+This is the main reason why this project exists (and I hate Editors without Vim-Keybinding support.).
+After some Googling and GitHub-ing, projects like [cnlohr/ch32v003fun](https://github.com/cnlohr/ch32v003fun)
+and [openwch/ch32v003](https://github.com/openwch/ch32v003) are too difficult for me to understand where to begin,
+and some of them are targeted Windows.
 
-## 配置
+The source code in this project is mostly copied from the generated content of MRS v1.91 for Non-OS CH32V003(J4M6).
+
+What changes are made?
+
+- Re-structured.
+- Added CMake support.
+  - To use in command-line
+  - To cooperate with CMake Tools extension
+- Launch and Debug json file
+  - Launch only, no Attach supported.
+- C++ support by default
+  - but, don't introduce `<iostream>`
+- long-run SysTicks providing uptime support
+  - mainly used for time/timer scheduling.
+- Re-implemented Delay_Us and Delay_Ms
+  - by using long-run SysTicks.
+- Remapped USART to not using SDIO
+  - SDIO if for flashing, sharing the same PIN with USART
+    puts CH32V003 in a state in which you can flash again.
+    and, WCH-LinkE's 'Power off/on and Erase all is not available to OpenOCD.
+  - I don't know if SDIO can work with USART, if it works for you, please help me out of this.
+  - Since USART is re-mapped to another pin, another USB-UART bridge is required.
+- `printf("\n")` instead of `printf("\r\n")`
+  - because it's more common.
+- and more.
+
+## Prerequisites
+
+- WCH's official OpenOCD and cross-platform toolchain installed
+- A CH32V003 development board
+- WCH-LinkE
+
+**Note:** if you're on MacOS, you should compile OpenOCD for yourself. See the sections at the end.
+
+## Config
+
+You should first have the WCH's official OpenOCD and toolchain installed.
 
 * `main/Makefile`
-  * 需要把文件最前面一些环境变量替换成你自己的。
+  * `OPENOCD_DIR` and `WCH_CFG`
 * `.vscode/launch.json`
-  * 需要把 `toolchainPrefix` 改成你自己的工具链目录。
+  * `toolchainPrefix`
 * `.vscode/c_cpp_properties.json`
-  * 需要把 `compilerPath` 改成你自己的编译器目录。
+  * `compilerPath`
 
-## 如何构建
+## How to Build
 
-需要先在 `main` 目录下 `make cmake` 生成 CMake，然后就可以 `make build` 编译项目。
-具体的命令可以参考 `Makefile`。
+Goto `main` folder, type `make cmake` to generate the cmake project, then you can `make build` to build the project.
 
-直接 `make` 即可一键编译、下载。以下是示例编译输出：
+Below is an example of how to build:
 
 ```bash
 main (main) → make build
 cd "build" && make
 [  4%] Building C object stub/CMakeFiles/stub.dir/ch32v00x_it.c.obj
 [  8%] Building C object stub/CMakeFiles/stub.dir/core_riscv.c.obj
-...省略一些内容...
+...omits some build logs...
 [100%] Built target ch32v00x.elf
 [100%] Built target ch32v00x.hex
 [100%] Built target ch32v00x.lst
@@ -36,55 +73,40 @@ cd "build" && make
 [100%] Built target ch32v00x.siz
 ```
 
-## 如何调试
+## How to Flash
 
-执行 `make debug` 开启端口监听。
-然后保存下面的文件为 `.vscode/launch.json`：
+`make flash` is all you need.
 
-```json
-{
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"variables": {
-				"toolchainPrefix": "/Users/Shared/MRS_Toolchain_MAC_V191/xpack-riscv-none-embed-gcc-8.2.0"
-			},
-			"name": "OpenOCD",
-			"type": "cppdbg",
-			"request": "launch",
-			"cwd": ".",
-			"program": "${workspaceFolder}/build/ch32v00x.elf",
-			"MIMode": "gdb",
-			"miDebuggerPath": "${toolchainPrefix}/bin/riscv-none-embed-gdb",
-			"useExtendedRemote": true,
-			"miDebuggerServerAddress": "localhost:3333",
-			"setupCommands": []
-		}
-	]
-}
-```
+## How to Debug
 
-修改其中的 `variables` 部分为你自己环境的。
+Debugging is supported!
 
-按快捷键 `F5` 或点击菜单 `Run` / `Start Debugging` 即可进入调试。
+First, `make debug` to let OpenOCD listen for incoming connections from GDB.
 
-支持的功能：
+Press `F5` (`Run`/`Start Debugging`) to enter debugging mode.
 
-- 单步、步进、步出
-- 查看变量、添加观察
-- 断点调试
-- 内存查看
-- 调用栈
+Features supported:
 
-**注：** 目前仅支持*启动*级别的调试，*附加*调试还没配好。
+- Step in, Step out, Step over
+- Watch, Eval
+- Breakpoints
+- Memory Viewer
+- Stacks
 
-## 版权
+## Copyright
 
-- 文件头中署名 *Author: WCH* 的，归 *Nanjing Qinheng Microelectronics Co., Ltd.* 所有。
+File headers containing *Author: WCH* is copyrighted to *Nanjing Qinheng Microelectronics Co., Ltd.*.
 
-## 如何在 MacOS 运行
+## MacOS?
 
-官方提供的 OpenOCD 不能在 MacOS 上跑起来（缺少 libusb，各种安装、自行编译没搞定），可以找官方要源代码，然后自己编译。可以参考：[在 MacOS 上编译 MounRiver Studio 的 OpenOCD](https://blog.twofei.com/894/)。
+I'm on MacOS.
+
+But, the OpenOCD provided by MounRiver Studio doesn't work on MacOS.
+You can request the source code of OpenOCD by sending email to the MRS developers to obtain a copy.
+The Email address can be found in the README file of MRS' OpenOCD directory.
+
+See <https://blog.twofei.com/894/> to see more if you have problem compiling OpenOCD for your own.
+
+## License
+
+MIT.
