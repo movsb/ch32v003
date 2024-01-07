@@ -1,7 +1,6 @@
-#include <ch32v00x/ch32v00x.h>
 #include <ch32v00x/debug.h>
-#include <ch32v00x/system_ch32v00x.h>
 #include <ch32v00x/ch32v00x_rcc.h>
+#include <ch32v00x/system_ch32v00x.h>
 
 int main(void)
 {
@@ -30,6 +29,6 @@ int main(void)
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
 		Delay_Ms(500);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
-		printf("当前 Ticks 计数器：%lus\n", SysTick_GetUptime()/1000/1000);
+		printf("SysTicks: %llu seconds.\n", SysTick_GetUptime()/1000/1000);
 	}
 }

@@ -1,5 +1,8 @@
 {
 	"cSpell.words": [
+		"CHIPID",
+		"CTLR",
+		"DBGMCU",
 		"GPIOD",
 		"libusb",
 		"microcontroller",
