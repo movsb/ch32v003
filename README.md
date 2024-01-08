@@ -25,9 +25,9 @@ What changes are made?
 - Re-implemented Delay_Us and Delay_Ms
   - by using long-run SysTicks.
 - Remapped USART to not using SDIO
-  - SDIO if for flashing, sharing the same PIN with USART
-    puts CH32V003 in a state in which you can flash again.
-    and, WCH-LinkE's 'Power off/on and Erase all is not available to OpenOCD.
+  - SDIO is for flashing, sharing the same PIN with USART
+    puts CH32V003 in a state in which you cannot flash again.
+    and, WCH-LinkE's 'Power off/on and Erase all' is not available to OpenOCD.
   - I don't know if SDIO can work with USART, if it works for you, please help me out of this.
   - Since USART is re-mapped to another pin, another USB-UART bridge is required.
 - `printf("\n")` instead of `printf("\r\n")`
@@ -38,7 +38,7 @@ What changes are made?
 
 - WCH's official OpenOCD and cross-platform toolchain installed
 - A CH32V003 development board
-- WCH-LinkE
+- WCH-LinkE (not WCH-Link)
 
 **Note:** if you're on MacOS, you should compile OpenOCD for yourself. See the sections at the end.
 

@@ -23,6 +23,7 @@ all: build sync flash reset
 build:
 	cd "$(BUILD)" && make
 
+# TODO remove
 .PHONY: sync
 sync:
 	cp "$(BUILD)/$(HEX)" "$(TMP)"
@@ -31,7 +32,7 @@ sync:
 kill:
 	kill $(ps aux | grep openocd | grep -v grep | awk '{print $1}') 2>/dev/null || true
 
-.PHONY: flash
+.PHONY: flash sync
 flash: kill
 	cd "$(OPENOCD_DIR)" && ./bin/openocd -f "$(WCH_CFG)" -c init -c halt -c "flash write_image $(TMP)/$(HEX)" -c exit
 
