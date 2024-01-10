@@ -29,6 +29,6 @@ int main(void)
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_RESET);
 		Delay_Ms(500);
 		GPIO_WriteBit(GPIOC,  GPIO_Pin_1, Bit_SET);
-		printf("SysTicks: %llu seconds.\n", SysTick_GetUptime()/1000/1000);
+		printf("SysTicks: %d seconds.\n", int(SysTick_GetUptime()/1000/1000));
 	}
 }

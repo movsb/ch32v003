@@ -29,7 +29,7 @@ static bool g_usart_printf_initialized = false;
 
 void USART_Printf_Init(uint32_t baudrate)
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_USART1, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 
 	// 把 PD6 映射为 UTX_2，避免与 SDIO 冲突
 	GPIO_PinRemapConfig(GPIO_PartialRemap2_USART1, ENABLE);

@@ -75,7 +75,7 @@ cd "build" && make
 
 ## How to Flash
 
-`make flash` is all you need.
+`make flash reset` is all you need.
 
 ## How to Debug
 
