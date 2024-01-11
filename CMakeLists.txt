@@ -37,6 +37,6 @@ function(ch32v00x_add_target name)
 
 	# 一些自定义的生成目标：二进制文件、列表文件、大小文件等
 	add_custom_target(${basename}.hex ALL riscv-none-embed-objcopy -O ihex ${name} ${basename}.hex)
-	add_custom_target(${basename}.lst ALL riscv-none-embed-objdump --all-headers --demangle --disassemble -M xw ${name} > ${basename}.lst)
+	add_custom_target(${basename}.lst ALL riscv-none-embed-objdump --all-headers --demangle --disassemble -M xw ${name} | expand -t8 > ${basename}.lst)
 	add_custom_target(${basename}.siz ALL riscv-none-embed-size --format=berkeley ${name})
 endfunction()
