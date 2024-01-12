@@ -4,7 +4,6 @@
  extern "C" {
 #endif
 
-#include <stdio.h>
 #include <ch32v00x/ch32v00x.h>
 
 void Delay_Us(uint32_t n);
